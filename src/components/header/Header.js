@@ -17,7 +17,7 @@ const { isLoggedIn } = user;
 
 function Header() {
   return (
-    <Navbar bg="dark" variant="dark" className="justify-content-between">
+    <Navbar variant="dark" className="justify-content-between" style={{ background: 'black' }}>
       <Navbar.Brand href="#home">TheStore</Navbar.Brand>
       <div>
         {

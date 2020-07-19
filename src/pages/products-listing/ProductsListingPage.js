@@ -9,7 +9,7 @@ const productsList = [
     id: 1,
     title: 'product name',
     photo: img,
-    description: 'salessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessalessale.',
+    description: 'salessalessalessalessaless lessalessalessalessalessaless lessalessalessalessalessalessalessalessal ssalessalessalessalessalessalessalessalessaless lessalessalessalessalessalessalessalessalessalessale.',
     price: 99.99,
     sale_percent: 50,
     end_sale_period: new Date(2020, 6, 15,10, 39)
@@ -66,7 +66,6 @@ function ProductsListingPage() {
   return (
     <section
       id="products-listing"
-      className="container"
     >
 
       <ProductsList
