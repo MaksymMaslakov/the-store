@@ -1,0 +1,35 @@
+#add-product-item{
+  color: white;
+
+  .add-product{
+    background: rgba(#331, 0.95);
+    height: 100%;
+    width: 100%;
+  }
+
+  .add-product-hover-link{
+    position: absolute;
+    top: 0;
+    left: 0;
+    overflow: hidden;
+    height: 0;
+    width: 0;
+
+    span {
+      font-size: 50px;
+      font-weight: bold;
+    }
+  }
+
+
+  &:hover{
+    .add-product-hover-link{
+      transition: height 0.3s, width 0.3s;
+      height: 100%;
+      width: 100%;
+      padding: 1rem;
+      background: #000;
+    }
+  }
+
+}
