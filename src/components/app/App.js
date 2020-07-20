@@ -20,6 +20,15 @@ function App() {
         <Route path='/auth'
                component={ AuthorizationPage }
                exact/>
+        <Route path='/'
+               render={() => {
+                 if(isLoggedIn) {
+                   return <Redirect to='/products'/>
+                 }else{
+                   return <Redirect to='/auth'/>
+                 }
+               }}
+               exact/>
         <Route path='/products'
                render={() => {
                  if(isLoggedIn) {

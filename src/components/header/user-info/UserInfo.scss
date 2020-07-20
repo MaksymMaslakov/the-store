@@ -1,8 +1,6 @@
-@import "../../../constants/css/variables";
-
 #user-info{
   margin: 0 10px;
-  height: $header-height;
+  height: 40px;
 
   .dropdown-menu{
     right: 0!important;
@@ -12,8 +10,8 @@
   .user-picture{
     display: inline-block;
     margin-right: 1rem;
-    height: ($header-height - 10px);
-    width: ($header-height - 10px);
+    height: 30px;
+    width: 30px;
 
     img{
       border: 2px white solid;
