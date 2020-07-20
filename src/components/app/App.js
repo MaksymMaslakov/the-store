@@ -6,12 +6,13 @@ import ProductsListingPage from "../../pages/products-listing";
 import ProductCreatePage from "../../pages/product-create";
 import ProductEditPage from "../../pages/product-edit";
 import AuthorizationPage from "../../pages/authorization";
+import NotFound from "../not-found"
 
 import './App.css';
 
 function App() {
-  const isLoggedIn = true;
-
+  const isLoggedIn = true, isError = true;
+  // TODO: create PrivateRoute hoc
   return (
     <div className="app">
       <Header isLoggedIn={ true }/>
@@ -46,7 +47,7 @@ function App() {
                  }
                }}
                exact/>
-        <Route component={ ErrorIndicator }  />
+        <Route component={NotFound}/>
       </Switch>
     </div>
   );
