@@ -8,6 +8,7 @@ const updateProductForm = (state, action) => {
       sale_percent: 0,
       end_sale_period: null,
       isFetching: false,
+      isPosting: false,
       error: null
     };
   }
@@ -21,6 +22,7 @@ const updateProductForm = (state, action) => {
       sale_percent: 0,
       end_sale_period: null,
       isFetching: true,
+      isPosting: false,
       error: null
     };
   }
@@ -40,9 +42,10 @@ const updateProductForm = (state, action) => {
       description: '',
       photo: null,
       price: undefined,
-      sale_percent: 0,
+      sale_percent: undefined,
       end_sale_period: null,
       isFetching: false,
+      isPosting: false,
       error: action.payload
     };
   }
@@ -52,6 +55,44 @@ const updateProductForm = (state, action) => {
       ...state.productForm,
       ...action.payload
     };
+  }
+
+  if(action.type === 'CLEAR_PRODUCT_FORM'){
+    return {
+      title: '',
+      description: '',
+      photo: null,
+      price: undefined,
+      sale_percent: undefined,
+      end_sale_period: null,
+      isFetching: false,
+      isPosting: false,
+      error: null
+    };
+  }
+
+  if(action.type === 'POST_PRODUCT_FORM_REQUEST'){
+    return {
+      ...state.productForm,
+      isPosting: true,
+      error: null
+    }
+  }
+
+  if(action.type === 'POST_PRODUCT_FORM_SUCCESS'){
+    return {
+      ...state.productForm,
+      isPosting: false,
+      error: null
+    }
+  }
+
+  if(action.type === 'POST_PRODUCT_FORM_SUCCESS'){
+    return {
+      ...state.productForm,
+      isPosting: false,
+      error: action.payload
+    }
   }
 
   return state.productForm;

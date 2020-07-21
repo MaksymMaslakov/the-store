@@ -9,7 +9,7 @@ const updateUser = (state, action) => {
     };
   }
 
-  if(action.type === 'FETCH_USER_REQUEST') {
+  if(action.type === 'AUTH_USER_REQUEST') {
     return {
       isLoggedIn: false,
       name: '',
@@ -19,7 +19,7 @@ const updateUser = (state, action) => {
     };
   }
 
-  if(action.type === 'FETCH_USER_SUCCESS') {
+  if(action.type === 'AUTH_USER_SUCCESS') {
     return {
       isLoggedIn: true,
       name: action.payload.name,
@@ -29,7 +29,7 @@ const updateUser = (state, action) => {
     };
   }
 
-  if(action.type === 'FETCH_USER_FAILURE') {
+  if(action.type === 'AUTH_USER_FAILURE') {
     return {
       isLoggedIn: false,
       name: '',

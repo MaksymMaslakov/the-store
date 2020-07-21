@@ -45,4 +45,11 @@ class StoreService {
 
     return await res.json()
   }
+
+  async getUser() {
+    return {
+      name: 'Peter',
+      picture: ''
+    }
+  }
 }
