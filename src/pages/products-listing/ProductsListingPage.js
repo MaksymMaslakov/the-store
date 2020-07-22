@@ -1,79 +1,46 @@
-import React from 'react';
+import React, { useEffect, useContext } from 'react';
+import { connect } from 'react-redux';
+import { Spinner } from 'react-bootstrap'
 
 import ProductsList from "../../components/products-list";
+import ErrorIndicator from "../../components/error-indicator";
+import ErrorBoundary from "../../components/error-boundary";
 
-import img from '../../some-img.jpg'
-
-const productsList = [
-  {
-    id: 1,
-    title: 'product name',
-    photo: img,
-    description: 'salessalessalessalessaless lessalessalessalessalessaless lessalessalessalessalessalessalessalessal ssalessalessalessalessalessalessalessalessaless lessalessalessalessalessalessalessalessalessalessale.',
-    price: 99.99,
-    sale_percent: 50,
-    end_sale_period: new Date(2020, 6, 15,10, 39)
-  },
-  {
-    id: 2,
-    title: 'product name',
-    photo: img,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
-    price: 99.99,
-    sale_percent: 50,
-    end_sale_period: new Date(2020, 10, 16,10, 39)
-  },
-  {
-    id: 3,
-    title: 'product name',
-    photo: img,
-    description: '',
-    price: 99.99,
-    sale_percent: 50,
-    end_sale_period: new Date(2020, 8, 16,10, 39)
-  },
-  {
-    id: 4,
-    title: 'product name',
-    photo: img,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.',
-    price: 99.99,
-    sale_percent: 50,
-    end_sale_period: new Date(2020, 8, 16,10, 39)
-  },
-  {
-    id: 5,
-    title: 'product name',
-    photo: img,
-    description: '',
-    price: 99.99,
-    sale_percent: 50,
-    end_sale_period: new Date(2020, 8, 16,10, 39)
-  },
-  {
-    id: 6,
-    title: 'product name',
-    photo: img,
-    description: 'Lorem ipsum dolor sit amet, consectetur adipiscing.',
-    price: 99.99,
-    sale_percent: 50,
-    end_sale_period: new Date(2020, 8, 16,10, 39)
-  }
-]
+import { fetchProducts } from "../../redux/actions";
+import TheStoreContext from "../../components/the-store-context";
 
 
-function ProductsListingPage() {
+function ProductsListingPage(props) {
+  const storeService = useContext(TheStoreContext)
+  const { isFetching, error: isError, productsList } = props.products
+
+  useEffect( () => {
+    props.fetchProducts(storeService)
+  }, [])
+
   return (
-    <section
-      id="products-listing"
-    >
-
-      <ProductsList
-        products={productsList}
-      />
-
+    <section id="products-listing">
+      <ErrorBoundary>
+        { isFetching ? <Spinner as="span" animation="border" size="sm" role="status"  aria-hidden="true"/> : null }
+        { isError ? <ErrorIndicator/> : null }
+        <ProductsList
+          products={ productsList }
+        />
+      </ErrorBoundary>
     </section>
   );
 }
 
-export default ProductsListingPage;
+const mapStateToProps = ({ products }) => {
+  return {
+    products
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    fetchProducts: fetchProducts(dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ProductsListingPage);

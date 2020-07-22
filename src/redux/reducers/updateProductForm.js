@@ -3,10 +3,10 @@ const updateProductForm = (state, action) => {
     return {
       title: '',
       description: '',
-      photo: null,
-      price: undefined,
-      sale_percent: 0,
-      end_sale_period: null,
+      photo: '',
+      price: '',
+      sale_percent: '',
+      end_sale_period: '',
       isFetching: false,
       isPosting: false,
       error: null
@@ -17,10 +17,10 @@ const updateProductForm = (state, action) => {
     return {
       title: '',
       description: '',
-      photo: null,
-      price: undefined,
-      sale_percent: 0,
-      end_sale_period: null,
+      photo: '',
+      price: '',
+      sale_percent: '',
+      end_sale_period: '',
       isFetching: true,
       isPosting: false,
       error: null
@@ -40,10 +40,10 @@ const updateProductForm = (state, action) => {
     return {
       title: '',
       description: '',
-      photo: null,
-      price: undefined,
-      sale_percent: undefined,
-      end_sale_period: null,
+      photo: '',
+      price: '',
+      sale_percent: '',
+      end_sale_period: '',
       isFetching: false,
       isPosting: false,
       error: action.payload
@@ -61,10 +61,10 @@ const updateProductForm = (state, action) => {
     return {
       title: '',
       description: '',
-      photo: null,
-      price: undefined,
-      sale_percent: undefined,
-      end_sale_period: null,
+      photo: '',
+      price: '',
+      sale_percent: '',
+      end_sale_period: '',
       isFetching: false,
       isPosting: false,
       error: null

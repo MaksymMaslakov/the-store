@@ -1,8 +1,8 @@
-import BASE_URL from '../constants'
+import { BASE_URL } from '../constants'
 
 class StoreService {
-  async getAllProducts () {
-    const res = await fetch(`${BASE_URL}/api/v1/products`);
+  getAllProducts = async () =>{
+    const res = await fetch(`${BASE_URL}/api/v1/products.json`);
     if(!res.ok){
       throw new Error(`Could not fetch, received ${res.status}`)
     }
@@ -10,8 +10,8 @@ class StoreService {
     return await res.json()
   }
 
-  async getProductById (id) {
-    const res = await fetch(`${BASE_URL}/api/v1/products/${id}`);
+  getProductById = async (id) => {
+    const res = await fetch(`${BASE_URL}/api/v1/products/${id}..json`);
     if(!res.ok){
       throw new Error(`Could not fetch, received ${res.status}`)
     }
@@ -19,9 +19,9 @@ class StoreService {
     return await res.json()
   }
 
-  async saveProduct ( product, method ) {
+  saveProduct = async ( product, method ) => {
     const pathAddition =  method === 'PUT' ? `/${product.id}` : '';
-    const res = await fetch(`${BASE_URL}/api/v1/products${ pathAddition }`, {
+    const res = await fetch(`${BASE_URL}/api/v1/products${ pathAddition }.json`, {
       method,
       headers: {
         Accept: 'application/json',
@@ -37,7 +37,7 @@ class StoreService {
     return await res.json()
   }
 
-  async deleteProductById (id) {
+  deleteProductById = async (id) => {
     const res = await fetch(`${BASE_URL}/api/v1/products/${id}`);
     if(!res.ok){
       throw new Error(`Could not fetch, received ${res.status}`)
@@ -46,10 +46,12 @@ class StoreService {
     return await res.json()
   }
 
-  async getUser() {
+  getUser = async  () => {
     return {
       name: 'Peter',
       picture: ''
     }
   }
 }
+
+export default StoreService;

@@ -18,9 +18,9 @@ const productsError = (error) => {
   }
 };
 
-const fetchProducts = (dispatch, storeService) => async () => {
+const fetchProducts = (dispatch) => (storeService) => {
   dispatch(productsRequested());
-  return await storeService.getAllProducts()
+  storeService.getAllProducts()
     .then( (products) => dispatch(productsDownloaded(products)))
     .catch( (error) => dispatch(productsError(error)));
 };

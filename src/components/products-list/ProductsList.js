@@ -15,7 +15,7 @@ function ProductsList(props) {
       <Row noGutters>
         <AddProduct/>
         {
-          props.products.map( product => {
+          (props.products || []).map( product => {
             return <ProductItem
               product={ product }
               key={ product.id }

@@ -17,7 +17,7 @@ const saveProductError = (error) => {
   }
 };
 
-const saveProductFormOnBackEnd = (dispatch, storeService) => async (product, method) => {
+const saveProductFormOnBackEnd = (dispatch) => (storeService,  method) => async (product) => {
   dispatch(saveProductRequested());
   return await storeService.saveProduct(product, method)
     .then( () => dispatch(productLoaded()))

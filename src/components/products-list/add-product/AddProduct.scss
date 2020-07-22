@@ -1,13 +1,15 @@
 #add-product-item{
-  color: white;
+  color: #111;
+  font-size: 2rem;
 
   .add-product{
-    background: rgba(#331, 0.95);
+    background: #f5f5f5;
     height: 100%;
     width: 100%;
   }
 
   .add-product-hover-link{
+    color: #f5f5f5;
     position: absolute;
     top: 0;
     left: 0;

@@ -1,11 +1,18 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useContext } from "react";
+import { Button } from "react-bootstrap";
+import { Link } from "react-router-dom";
+
 
 import Price from '../price'
 import SaleTimer from "../sale-timer";
 
 import './ProductInfo.scss'
-import { Button } from "react-bootstrap";
+
+import TheStoreContext from "../../../the-store-context";
+
 function ProductInfo(props) {
+  const storeService = useContext(TheStoreContext);
+
   const {
     id,
     title,
@@ -37,8 +44,17 @@ function ProductInfo(props) {
         </div>
       }
       <div className="d-flex justify-content-around">
-        <Button variant="outline-danger" onClick={ () => console.log(`Delete ${id} product`)}>Delete</Button>
-        <Button variant="outline-primary" onClick={ () => console.log(`Edit ${id} product`)}>Edit</Button>
+        <Button variant="outline-danger"
+                onClick={ () => storeService.deleteProductById(id)}
+        >
+          Delete
+        </Button>
+        <Link
+          to={ `/products/edit/${id}` }
+          className="btn btn-outline-primary"
+        >
+          Edit
+        </Link>
       </div>
     </div>
   );

@@ -11,7 +11,7 @@ import NotFound from "../not-found"
 import './App.css';
 
 function App() {
-  const isLoggedIn = true, isError = true;
+  const isLoggedIn = true;
   // TODO: create PrivateRoute hoc
   return (
     <div className="app">
