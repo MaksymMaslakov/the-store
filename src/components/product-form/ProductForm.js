@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { connect } from "react-redux";
+import { withRouter } from 'react-router-dom'
 import {
   Container,
   Col,
@@ -14,11 +16,14 @@ import {
   clearProductForm,
   updateProductForm
 } from "../../redux/actions";
-import { connect } from "react-redux";
+
 
 function ProductForm(props) {
-
-  const { title, description, photo, price, sale_percent, end_sale_period } = props.productForm;
+  const { title, description, photo, price,
+    sale_percent, end_sale_period,
+     } = props.productForm;
+  const { error, isPosting, isFetching } = props
+  const [validated, setValidated] = useState(false);
 
   const changeTitleHandler = (e) => props.updateForm({...props.productForm,title: e.target.value})
   const changeDescriptionHandler = (e) => props.updateForm({...props.productForm,description: e.target.value})
@@ -26,7 +31,7 @@ function ProductForm(props) {
     const imageFile = e.target.files[0];
 
     if (imageFile.name.match(/\.(jpg|jpeg|png|gif)$/)) {
-      props.updateForm({...props.productForm,title: imageFile})
+      props.updateForm({...props.productForm,photo: imageFile})
       readURL(e)
     }
   };
@@ -34,53 +39,38 @@ function ProductForm(props) {
   const changeSalePercentHandler = (e) => props.updateForm({...props.productForm,sale_percent: e.target.value})
   const changeEndSalePeriodHandler = (e) => props.updateForm({...props.productForm,end_sale_period: e.target.value})
 
-  const [validated, setValidated] = useState(false);
-
   const handleSubmit = (saveHandler) => (event) => {
+    // TODO: add validatoin for fields
     event.preventDefault();
-    let sendForm = true;
     const form = event.currentTarget;
-    if (form.checkValidity() === false) {
+
+    if (form.checkValidity() === false) { // form is not correct
       event.stopPropagation();
-
-      sendForm = false;
-      console.log('form is not correct')
-    }
-
-
-    setValidated(true);
-
-    if(sendForm) {
-      console.log('form is  correct')
-      saveHandler(props.productForm)
+    }else{  // form is  correct
+      setValidated(true);
+      console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!", {...props.productForm, user_id: props.user.id})
+      props.updateForm({...props.productForm, user_id: props.user.id})
+      saveHandler({...props.productForm, user_id: props.user.id})
+      if(!error && !isPosting){
+        props.history.push('/products')
+      }
     }
   };
 
-  const today = Date.now();
-  console.log(today)
-  const isValidTitleInput = (title.length >= 20 && title.length <= 60),
-    isValidDescInput = (description.length > 0 && description.length <= 200),
-    isValidPriceInput = (price > 0 && price <= 99999999.99),
-    isValidSalePercentInput = ( sale_percent >= 10 && sale_percent <= 90 ),
-    isValidEndSalePeriodInput = true /*(new Date(end_sale_period) >
-      (new Date( `${new Date(today).getFullYear()}-${new Date(today).getMonth()}-${new Date(today).getDay()}`)))*/
-  // console.log('User',(new Date(end_sale_period)))
-  console.log('Date',(new Date( `${new Date(today).getFullYear()}-${new Date(today).getMonth()}-${new Date(today).getDay()}`)))
+  const isValidSalePercentInput = ((sale_percent >= 10) && (sale_percent >= 90));
   return (
     <Container id="product-form" md={8} offset={2}>
+      {(isPosting || isFetching) && <Spinner animation="border" size="sm"/>}
+      {error && <p>{error.message}</p>}
       <Form  validated={validated} onSubmit={handleSubmit(props.saveHandler)}>
         <Form.Group>
           <Form.Label>Title: *</Form.Label>
           <Form.Control size="sm"
                         required
                         type="text"
-                        isValid={ isValidTitleInput }
                         value={ title }
                         onChange={ changeTitleHandler }
           />
-          <Form.Control.Feedback>
-            Looks good!
-          </Form.Control.Feedback>
           <Form.Control.Feedback type="invalid">
             It should be 20-60 signs
           </Form.Control.Feedback>
@@ -97,8 +87,8 @@ function ProductForm(props) {
               Product image: *
             </label>
             <input id="form-input-file"
-                   required
-
+                    // TODO: set required
+                   // required
                    type="file"
                    className="form-control-file"
                    onChange={ changePhotoHandler }/>
@@ -110,13 +100,9 @@ function ProductForm(props) {
           <Form.Control size="sm"
                         as="textarea"
                         rows="3"
-                        isValid={ isValidDescInput }
                         value={ description }
                         onChange={ changeDescriptionHandler }
           />
-          <Form.Control.Feedback>
-            Looks good!
-          </Form.Control.Feedback>
           <Form.Control.Feedback type="invalid">
             It should be less then 200 signs
           </Form.Control.Feedback>
@@ -128,13 +114,9 @@ function ProductForm(props) {
             <Form.Control size="sm"
                           required
                           type="number"
-                          isValid={ isValidPriceInput }
                           value={ price }
                           onChange={ changePriceHandler }
             />
-            <Form.Control.Feedback>
-              Looks good!
-            </Form.Control.Feedback>
             <Form.Control.Feedback type="invalid">
               Have to be between 0.00 - 99999999.99$
             </Form.Control.Feedback>
@@ -144,13 +126,9 @@ function ProductForm(props) {
             <Form.Label>Sale percent:</Form.Label>
             <Form.Control size="sm"
                           type="number"
-                          isValid={ isValidSalePercentInput}
                           value={ sale_percent }
                           onChange={ changeSalePercentHandler }
             />
-            <Form.Control.Feedback>
-              Looks good!
-            </Form.Control.Feedback>
             <Form.Control.Feedback type="invalid">
               Have to be between 10-90%
             </Form.Control.Feedback>
@@ -162,13 +140,9 @@ function ProductForm(props) {
                           required={isValidSalePercentInput}
                           disabled={!isValidSalePercentInput}
                           type="date"
-                          isValid={ isValidEndSalePeriodInput }
                           value={ end_sale_period }
                           onChange={ changeEndSalePeriodHandler }
             />
-            <Form.Control.Feedback>
-              Looks good!
-            </Form.Control.Feedback>
             <Form.Control.Feedback type="invalid">
               Have to be greater then today
             </Form.Control.Feedback>
@@ -186,6 +160,7 @@ function ProductForm(props) {
             variant="primary"
             type="submit"
             disabled={ props.productForm.isPosting && true }
+            // onClick={ (e) => e.preventDefault()}
           >
             { props.productForm.isPosting &&
             <Spinner
@@ -203,6 +178,12 @@ function ProductForm(props) {
     </Container>
   );
 }
+const mapStateToProps = ({user, productForm}) => {
+  return {
+    user: user.user,
+    ...productForm,
+  }
+}
 
 const mapDispatchToProps = (dispatch) => {
   return {
@@ -211,4 +192,5 @@ const mapDispatchToProps = (dispatch) => {
   }
 }
 
-export default connect(undefined, mapDispatchToProps)(ProductForm);
+export default connect(mapStateToProps, mapDispatchToProps)(
+                  withRouter(ProductForm));

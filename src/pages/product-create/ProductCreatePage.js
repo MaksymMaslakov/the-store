@@ -5,7 +5,7 @@ import ProductForm from "../../components/product-form";
 import ErrorBoundary from "../../components/error-boundary";
 import {
   clearProductForm,
-  saveProductFormOnBackEnd,
+  postProductForm,
 } from "../../redux/actions";
 import TheStoreContext from "../../components/the-store-context";
 
@@ -19,24 +19,17 @@ function ProductCreatePage(props) {
     <section id="product-create">
       <ErrorBoundary>
         <ProductForm
-          productForm={props.productForm}
-          saveHandler={props.saveHandler(storeService, 'POST')}/>
+          saveHandler={props.saveHandler(storeService)}/>
       </ErrorBoundary>
     </section>
   );
 }
 
-const mapStateToProps = ({ productForm }) => {
-  return {
-    productForm
-  }
-}
-
 const mapDispatchToProps = (dispatch) => {
   return {
     clearForm: () => dispatch(clearProductForm()),
-    saveHandler: saveProductFormOnBackEnd(dispatch)
+    saveHandler: postProductForm(dispatch)
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(ProductCreatePage);
+export default connect(null, mapDispatchToProps)(ProductCreatePage);

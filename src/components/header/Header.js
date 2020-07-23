@@ -1,33 +1,40 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { connect } from 'react-redux'
+import { logoutUser } from '../../redux/actions'
+import TheStoreContext from "../the-store-context";
 
-import UserInfo from "./user-info";
-import LoginButton from "../login-button";
-import { Navbar } from 'react-bootstrap'
+import { Link } from 'react-router-dom'
+import { Navbar, Nav } from 'react-bootstrap'
 
 import './Header.scss';
-import img from '../../some-img.jpg'
 
-const user = {
-  isLoggedIn: true,
-  picture: img,
-  name: 'Peter'
-}
+function Header({isLoggedIn, logout}) {
+  const storeService = useContext(TheStoreContext)
 
-const { isLoggedIn } = user;
-
-function Header() {
   return (
     <Navbar variant="dark" className="justify-content-between" style={{ background: 'black' }}>
-      <Navbar.Brand href="#home">TheStore</Navbar.Brand>
-      <div>
-        {
-          isLoggedIn
-            ? <UserInfo user={ user } />
-            : <LoginButton isLoggedIn={ isLoggedIn } />
-        }
-      </div>
+      <Navbar.Brand>
+        <Link to='/'>
+          TheStore
+        </Link>
+      </Navbar.Brand>
+      {isLoggedIn
+        && <Nav.Link onClick={() => logout(storeService)}>
+          Logout
+        </Nav.Link>
+      }
     </Navbar>
   );
 }
+const mapStateToProps = ({ user }) => {
+  return {
+    isLoggedIn: user.isLoggedIn
+  }
+}
 
-export default Header;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    logout: (service) => dispatch(logoutUser(service))
+  }
+}
+export default connect(mapStateToProps,mapDispatchToProps)(Header);

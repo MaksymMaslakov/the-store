@@ -1,12 +1,16 @@
 const updateProductForm = (state, action) => {
   if(state === undefined){
     return {
-      title: '',
-      description: '',
-      photo: '',
-      price: '',
-      sale_percent: '',
-      end_sale_period: '',
+      productForm: {
+        title: '',
+        description: '',
+        photo: '',
+        price: '',
+        sale_percent: '',
+        end_sale_period: '',
+        user_id: null,
+        id: null,
+      },
       isFetching: false,
       isPosting: false,
       error: null
@@ -15,14 +19,18 @@ const updateProductForm = (state, action) => {
 
   if(action.type === 'FETCH_PRODUCT_FORM_REQUEST') {
     return {
-      title: '',
-      description: '',
-      photo: '',
-      price: '',
-      sale_percent: '',
-      end_sale_period: '',
+      ...state.productForm,
+      productForm: {
+        title: '',
+        description: '',
+        photo: '',
+        price: '',
+        sale_percent: '',
+        end_sale_period: '',
+        user_id: null,
+        id: null,
+      },
       isFetching: true,
-      isPosting: false,
       error: null
     };
   }
@@ -30,7 +38,10 @@ const updateProductForm = (state, action) => {
   if(action.type === 'FETCH_PRODUCT_FORM_SUCCESS') {
     return {
       ...state.productForm,
-      ...action.payload,
+      productForm: {
+        ...action.payload.product,
+        id: action.payload.id
+      },
       isFetching: false,
       error: null
     };
@@ -38,14 +49,18 @@ const updateProductForm = (state, action) => {
 
   if(action.type === 'FETCH_PRODUCT_FORM_FAILURE') {
     return {
-      title: '',
-      description: '',
-      photo: '',
-      price: '',
-      sale_percent: '',
-      end_sale_period: '',
+      ...state.productForm,
+      productForm: {
+        title: '',
+        description: '',
+        photo: '',
+        price: '',
+        sale_percent: '',
+        end_sale_period: '',
+        user_id: null,
+        id: null,
+      },
       isFetching: false,
-      isPosting: false,
       error: action.payload
     };
   }
@@ -53,18 +68,24 @@ const updateProductForm = (state, action) => {
   if(action.type === 'UPDATE_PRODUCT_FORM'){
     return {
       ...state.productForm,
-      ...action.payload
+      productForm: {
+        ...action.payload.product
+      }
     };
   }
 
   if(action.type === 'CLEAR_PRODUCT_FORM'){
     return {
-      title: '',
-      description: '',
-      photo: '',
-      price: '',
-      sale_percent: '',
-      end_sale_period: '',
+      productForm: {
+        title: '',
+        description: '',
+        photo: '',
+        price: '',
+        sale_percent: '',
+        end_sale_period: '',
+        user_id: null,
+        id: null,
+      },
       isFetching: false,
       isPosting: false,
       error: null
@@ -82,12 +103,15 @@ const updateProductForm = (state, action) => {
   if(action.type === 'POST_PRODUCT_FORM_SUCCESS'){
     return {
       ...state.productForm,
+      productForm: {
+        ...action.payload.product
+      },
       isPosting: false,
       error: null
     }
   }
 
-  if(action.type === 'POST_PRODUCT_FORM_SUCCESS'){
+  if(action.type === 'POST_PRODUCT_FORM_FAILURE'){
     return {
       ...state.productForm,
       isPosting: false,

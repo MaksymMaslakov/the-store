@@ -1,9 +1,17 @@
 const updateUser = (state, action) => {
   if(state === undefined){
     return {
+      user: null,
       isLoggedIn: false,
-      name: '',
-      picture: '',
+      isFetching: false,
+      error: null
+    };
+  }
+
+  if(action.type === 'LOGOUT_USER') {
+    return {
+      user: null,
+      isLoggedIn: false,
       isFetching: false,
       error: null
     };
@@ -11,9 +19,8 @@ const updateUser = (state, action) => {
 
   if(action.type === 'AUTH_USER_REQUEST') {
     return {
+      user: null,
       isLoggedIn: false,
-      name: '',
-      picture: '',
       isFetching: true,
       error: null
     };
@@ -21,9 +28,8 @@ const updateUser = (state, action) => {
 
   if(action.type === 'AUTH_USER_SUCCESS') {
     return {
+      user: action.payload.user,
       isLoggedIn: true,
-      name: action.payload.name,
-      picture: action.payload.picture,
       isFetching: false,
       error: null
     };
@@ -31,9 +37,8 @@ const updateUser = (state, action) => {
 
   if(action.type === 'AUTH_USER_FAILURE') {
     return {
+      user: null,
       isLoggedIn: false,
-      name: '',
-      picture: '',
       isFetching: false,
       error: action.payload
     };

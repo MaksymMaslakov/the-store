@@ -14,7 +14,7 @@ export default class ErrorBoundary extends Component{
 
   render() {
     if(this.state.hasError)
-      return <ErrorIndicator/>;
+      return <ErrorIndicator error={this.props.error}/>;
     return this.props.children;
   }
 }

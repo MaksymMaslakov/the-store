@@ -4,6 +4,6 @@ import { createStore } from 'redux';
 import reducer from './redux/reducers';
 
 // const enhancer = persistState();
-const store = createStore(reducer)/*, undefined, enhancer);*/
+const store = createStore(reducer/*, undefined, enhancer*/);
 
 export default store;

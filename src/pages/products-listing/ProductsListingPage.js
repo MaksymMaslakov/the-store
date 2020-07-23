@@ -12,28 +12,28 @@ import TheStoreContext from "../../components/the-store-context";
 
 function ProductsListingPage(props) {
   const storeService = useContext(TheStoreContext)
-  const { isFetching, error: isError, productsList } = props.products
-
+  const { isFetching, error, productsList } = props.products
   useEffect( () => {
-    props.fetchProducts(storeService)
+    props.fetchProducts(storeService, props.user.id)
   }, [])
 
   return (
     <section id="products-listing">
-      <ErrorBoundary>
+      <ErrorBoundary error={error}>
         { isFetching ? <Spinner as="span" animation="border" size="sm" role="status"  aria-hidden="true"/> : null }
-        { isError ? <ErrorIndicator/> : null }
-        <ProductsList
-          products={ productsList }
-        />
-      </ErrorBoundary>
+        { !!error
+          ? <ErrorIndicator/>
+          : <ProductsList products={ productsList }/>
+        }
+        </ErrorBoundary>
     </section>
   );
 }
 
-const mapStateToProps = ({ products }) => {
+const mapStateToProps = ({ user, products }) => {
   return {
-    products
+    products,
+    user: user.user
   }
 }
 

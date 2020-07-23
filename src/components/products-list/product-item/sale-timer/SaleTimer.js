@@ -9,15 +9,17 @@ function SaleTimer(props) {
   const [timeLeft, setTimeLeft] = useState(getTimeRemaining(props.endtime));
 
   useEffect(() => {
-    setTimeout(() => {
+    const timout = setTimeout(() => {
       setTimeLeft(getTimeRemaining(props.endtime));
-    }, 1000);
+    }, 1000*60);
+
+    return () => clearTimeout(timout)
   });
 
   return (
       <span>
         {
-          `Remaining: ${timeLeft.days}:${timeLeft.hours}:${timeLeft.minutes}:${timeLeft.seconds}`
+          `Remaining: ${timeLeft.days ? (timeLeft.days + ' day(-s) ') : ''} ${timeLeft.hours} hour(-s)`
         }
       </span>
   );

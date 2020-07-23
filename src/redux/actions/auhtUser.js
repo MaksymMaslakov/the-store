@@ -7,7 +7,11 @@ const authUserRequested = () =>{
 const authUserSuccess = (user) => {
   return {
     type: 'AUTH_USER_SUCCESS',
-    payload: user
+    payload: {
+      user: {
+        id: user.uid
+      }
+    }
   }
 };
 
@@ -18,12 +22,18 @@ const authUserFailure = (error) => {
   }
 };
 
-const authUser = (dispatch, storeService) => async () => {
+const authUser = (dispatch) => (storeService, email, password, action) => {
   dispatch(authUserRequested());
-  // TODO:
-  return await storeService.getUser()
+
+  storeService.signInOrUp(email, password, action)
     .then( (user) => dispatch(authUserSuccess(user)))
-    .catch( (error) => dispatch(authUserFailure(error)));
+    .catch( (error) => dispatch(authUserFailure({
+      code: error.code,
+      message: error.message
+    })));
 };
 
-export default authUser;
+export {
+  authUser,
+  authUserSuccess
+}

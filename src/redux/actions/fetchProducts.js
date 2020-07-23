@@ -18,11 +18,14 @@ const productsError = (error) => {
   }
 };
 
-const fetchProducts = (dispatch) => (storeService) => {
+const fetchProducts = (dispatch) => (storeService, user_id) => {
   dispatch(productsRequested());
-  storeService.getAllProducts()
+  storeService.getAllProducts(user_id)
     .then( (products) => dispatch(productsDownloaded(products)))
-    .catch( (error) => dispatch(productsError(error)));
+    .catch( (error) => dispatch(productsError({
+      code: error.code,
+      message: error.message
+    })));
 };
 
 export default fetchProducts;

@@ -1,44 +1,92 @@
-import React from "react";
+import React, {useContext, useEffect, useState} from "react";
+import { connect } from 'react-redux'
+import { withRouter } from 'react-router-dom'
+import { authUser } from '../../redux/actions'
+import TheStoreContext from "../the-store-context";
 
-import
-{
-  Form,
-  Button
-} from 'react-bootstrap'
+import {  Form, Button, Spinner } from 'react-bootstrap'
 
 import './AuthForm.scss';
 
 function AuthForm(props) {
+  const storeService = useContext(TheStoreContext)
+
+  const { error, isFetching } = props;
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [action, setAction] = useState('SIGN_UP')
+  // const [validated, setValidated] = useState(false);
+
+
+  const isFormFill = ((email.length !== 0) && (password.length !== 0))
+
+  const submitHandler = (event) => {
+    event.preventDefault();
+
+    const form = event.currentTarget;
+
+    console.log("Submited")
+    if (form.checkValidity() === false) {
+      event.stopPropagation();
+
+      console.log('form is not correct')
+    }else{
+      console.log('form is  correct')
+      // setValidated(true);
+      props.authUser(storeService, email, password, action)
+    }
+  }
 
   return (
-    <Form id="auth-form">
-        <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
+    <Form id="auth-form"  onSubmit={submitHandler}>
+      <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
       <Form.Group>
-        {/*<Form.Label>Email address</Form.Label>*/}
         <Form.Control type="email"
                       placeholder="Email address"
-                      required=""
-                      autoFocus="" />
+                      required
+                      autoFocus=""
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}/>
       </Form.Group>
 
       <Form.Group>
-        {/*<Form.Label>Password</Form.Label>*/}
-        <Form.Control type="email"
+        <Form.Control type="password"
                       placeholder="Password"
-                      required="" />
+                      required
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}/>
       </Form.Group>
-      <Form.Check
-        type="checkbox"
-        id="checkbox-remember-me"
-        label="Remember me"
-        className="mb-2"
-      />
+      <Form.Group>
         <Button variant="primary" className="btn-block"
-                type="submit">
+                type="submit"
+                onClick={() => setAction('SIGN_IN')}
+                disabled={!isFormFill}>
           Sign in
         </Button>
+        <Button variant="warning" className="btn-block"
+                type="submit"
+                onClick={() => setAction('SIGN_UP')}
+                disabled={!isFormFill}>
+          Sign up
+        </Button>
+      </Form.Group>
+      {isFetching && <Spinner animation="border" size="sm"/>}
+      {error && <p>{error.message}</p>}
     </Form>
   )
 }
 
-export default AuthForm;
+const mapStateToProps = ({user}) => {
+  return {
+    ...user
+  }
+}
+
+const mapDispatchToProps = (dispatch) => {
+  return {
+    authUser: authUser(dispatch)
+  }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(
+                  withRouter(AuthForm));

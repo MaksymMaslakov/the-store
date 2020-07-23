@@ -1,14 +1,14 @@
 import React, { Fragment, useContext } from "react";
-import { Button } from "react-bootstrap";
+import { connect } from "react-redux"
+import {Button, Spinner} from "react-bootstrap";
 import { Link } from "react-router-dom";
-
+import TheStoreContext from "../../../the-store-context";
+import { deleteProduct } from "../../../../redux/actions"
 
 import Price from '../price'
 import SaleTimer from "../sale-timer";
 
 import './ProductInfo.scss'
-
-import TheStoreContext from "../../../the-store-context";
 
 function ProductInfo(props) {
   const storeService = useContext(TheStoreContext);
@@ -20,7 +20,6 @@ function ProductInfo(props) {
     sale_percent,
     end_sale_period
   } = props.product;
-
   const isSale = !!sale_percent
     && !!end_sale_period
     && ((Date.parse(end_sale_period) - Date.now())) > 0;
@@ -37,16 +36,24 @@ function ProductInfo(props) {
         <Price product={ props.product } isSale={isSale}/>
       </div>
       {isSale &&
-        <div className="text-center">
-          <small className="text-muted m-0">
-            <SaleTimer endtime={end_sale_period}/>
-          </small>
-        </div>
+      <div className="text-center">
+        <small className="text-muted m-0">
+          <SaleTimer endtime={end_sale_period}/>
+        </small>
+      </div>
       }
       <div className="d-flex justify-content-around">
         <Button variant="outline-danger"
-                onClick={ () => storeService.deleteProductById(id)}
-        >
+                onClick={ () => props.deleteProduct(storeService, id)}
+        >{ props.isDeleting &&
+          <Spinner
+            as="span"
+            animation="border"
+            size="sm"
+            role="status"
+            aria-hidden="true"
+          />
+        }
           Delete
         </Button>
         <Link
@@ -59,5 +66,15 @@ function ProductInfo(props) {
     </div>
   );
 }
+const mapStateToProps = ({products}) => {
+  return {
+    isDeleting: products.isDeleting
+  }
+}
 
-export default ProductInfo;
+const mapDispatchToProps = (dispatch) => {
+  return {
+    deleteProduct: deleteProduct(dispatch)
+  }
+}
+export default connect(mapStateToProps, mapDispatchToProps)(ProductInfo);

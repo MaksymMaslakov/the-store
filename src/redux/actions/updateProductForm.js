@@ -1,7 +1,7 @@
-const updateProductForm = (productForm) => {
+const updateProductForm = (product) => {
   return {
     type: 'UPDATE_PRODUCT_FORM',
-    payload: productForm
+    payload: {product}
   }
 }
 

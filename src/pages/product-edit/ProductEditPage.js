@@ -5,7 +5,7 @@ import { withRouter } from "react-router-dom"
 import ProductForm from "../../components/product-form";
 import {
   fetchProductById,
-  saveProductFormOnBackEnd,
+  putProductForm,
 } from "../../redux/actions";
 import TheStoreContext from "../../components/the-store-context";
 
@@ -18,24 +18,17 @@ function ProductEditPage(props) {
   return (
     <section id="product-edit">
       <ProductForm
-        productForm={props.productForm}
-        saveHandler={props.saveHandler(storeService, 'PUT')}/>
+        saveHandler={props.saveHandler(storeService)}/>
     </section>
   )
-}
-
-const mapStateToProps = ({ productForm }) => {
-  return {
-    productForm
-  }
 }
 
 const mapDispatchToProps = (dispatch) => {
   return {
     fetchProduct: fetchProductById(dispatch),
-    saveHandler: saveProductFormOnBackEnd(dispatch)
+    saveHandler: putProductForm(dispatch)
   }
 }
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(null, mapDispatchToProps)(
                   withRouter(ProductEditPage));

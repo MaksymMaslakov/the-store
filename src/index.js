@@ -2,6 +2,7 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux'
 import { BrowserRouter as Router } from "react-router-dom";
+
 import TheStoreContext from "./components/the-store-context";
 import { StoreService } from './services';
 import store from './store'

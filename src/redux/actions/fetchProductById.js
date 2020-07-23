@@ -4,10 +4,10 @@ const productRequested = () =>{
   }
 };
 
-const productDownloaded = (productForm) => {
+const productDownloaded = (product, id) => {
   return {
     type: 'FETCH_PRODUCT_FORM_SUCCESS',
-    payload: productForm
+    payload: {product, id}
   }
 };
 
@@ -18,11 +18,14 @@ const productError = (error) => {
   }
 };
 
-const fetchProductById = (dispatch) => async (storeService, id) => {
+const fetchProductById = (dispatch) => (storeService, id) => {
   dispatch(productRequested());
-  return await storeService.getProductById(id)
-    .then( (productForm) => dispatch(productDownloaded(productForm)))
-    .catch( (error) => dispatch(productError(error)));
+  storeService.getProductById(id)
+    .then( (product) => dispatch(productDownloaded(product,id)))
+    .catch( (error) => dispatch(productError({
+      code: error.code,
+      message: error.message
+    })));
 };
 
 export default fetchProductById;
