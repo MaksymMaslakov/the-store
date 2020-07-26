@@ -25,7 +25,38 @@ function ProductForm(props) {
   } = props.productForm;
   const { error, isPosting, isFetching } = props
   const [validated, setValidated] = useState(false);
-
+  let today = new Date(),
+    day = today.getDate(),
+    month = today.getMonth()+1, //January is 0
+    year = today.getFullYear();
+  if(day<10){
+    day='0'+day
+  }
+  if(month<10){
+    month='0'+month
+  }
+  today = year+'-'+month+'-'+day;
+  const constrainValidation = {
+    title: {
+      minLength: "20",
+      maxLength: "60"
+    },
+    description: {
+      maxLength: "200"
+    },
+    price: {
+      min: "0",
+      max: "99999999.99"
+    },
+    sale_percent: {
+      min: "10",
+      max: "90"
+    },
+    end_sale_period: {
+      min: today
+    }
+  }
+  console.log('constrainValidation.end_sale_period.min: ', constrainValidation.end_sale_period.min)
   const changeTitleHandler = (e) => props.updateForm({...props.productForm,title: e.target.value})
   const changeDescriptionHandler = (e) => props.updateForm({...props.productForm,description: e.target.value})
   const changePhotoHandler = (e) => {
@@ -40,7 +71,6 @@ function ProductForm(props) {
       props.updateForm({...props.productForm,photo: imageFile})
       readURL(e)
   }
-  //
   const changePriceHandler = (e) => props.updateForm({...props.productForm,price: e.target.value})
   const changeSalePercentHandler = (e) => props.updateForm({...props.productForm,sale_percent: e.target.value})
   const changeEndSalePeriodHandler = (e) => props.updateForm({...props.productForm,end_sale_period: e.target.value})
@@ -64,7 +94,7 @@ function ProductForm(props) {
     }
   };
 
-  const isValidSalePercentInput = ((sale_percent >= 10) && (sale_percent >= 90));
+  const isValidSalePercentInput = ((sale_percent >= 10) && (sale_percent <= 90));
   return (
     <Container id="product-form" md={8} offset={2}>
       {(isPosting || isFetching) && <Spinner animation="border" size="sm"/>}
@@ -74,13 +104,12 @@ function ProductForm(props) {
           <Form.Label>Title: *</Form.Label>
           <Form.Control size="sm"
                         required
+                        minLength={constrainValidation.title.minLength}
+                        maxLength={constrainValidation.title.maxLength}
                         type="text"
                         value={ title }
                         onChange={ changeTitleHandler }
           />
-          <Form.Control.Feedback type="invalid">
-            It should be 20-60 signs
-          </Form.Control.Feedback>
         </Form.Group>
 
         <Form.Row id="product-img-form" className="justify-content-around align-items-center">
@@ -106,6 +135,7 @@ function ProductForm(props) {
           <Form.Label>Product description:</Form.Label>
           <Form.Control size="sm"
                         as="textarea"
+                        maxLength={constrainValidation.description.maxLength}
                         rows="3"
                         value={ description }
                         onChange={ changeDescriptionHandler }
@@ -120,25 +150,23 @@ function ProductForm(props) {
             <Form.Label>Price: *</Form.Label>
             <Form.Control size="sm"
                           required
+                          min={constrainValidation.price.min}
+                          max={constrainValidation.price.max}
                           type="number"
                           value={ price }
                           onChange={ changePriceHandler }
             />
-            <Form.Control.Feedback type="invalid">
-              Have to be between 0.00 - 99999999.99$
-            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group as={Col} className="col-12 col-md-4">
             <Form.Label>Sale percent:</Form.Label>
             <Form.Control size="sm"
                           type="number"
+                          min={constrainValidation.sale_percent.min}
+                          max={constrainValidation.sale_percent.max}
                           value={ sale_percent }
                           onChange={ changeSalePercentHandler }
             />
-            <Form.Control.Feedback type="invalid">
-              Have to be between 10-90%
-            </Form.Control.Feedback>
           </Form.Group>
 
           <Form.Group as={Col} className="col-12 col-md-4">
@@ -147,12 +175,10 @@ function ProductForm(props) {
                           required={isValidSalePercentInput}
                           disabled={!isValidSalePercentInput}
                           type="date"
+                          min={constrainValidation.end_sale_period.min}
                           value={ end_sale_period }
                           onChange={ changeEndSalePeriodHandler }
             />
-            <Form.Control.Feedback type="invalid">
-              Have to be greater then today
-            </Form.Control.Feedback>
           </Form.Group>
         </Form.Row>
 
