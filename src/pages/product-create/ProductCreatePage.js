@@ -19,6 +19,7 @@ function ProductCreatePage(props) {
     <section id="product-create">
       <ErrorBoundary>
         <ProductForm
+          isUpdate={false}
           saveHandler={props.saveHandler(storeService)}/>
       </ErrorBoundary>
     </section>

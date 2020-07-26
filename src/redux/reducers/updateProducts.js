@@ -46,7 +46,7 @@ const updateProducts = (state, action) => {
   if(action.type === 'DELETE_PRODUCT_SUCCESS'){
     return {
       ...state.products,
-      productsList: state.products.productsList.filter( (product) => product.id !== action.payload.id ),
+      productsList: state.products.productsList.filter( (product) => product.id !== action.payload.product.id ),
       isDeleting: false,
       error: null
     }

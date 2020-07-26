@@ -4,10 +4,10 @@ const putProductRequested = () =>{
   }
 };
 
-const productLoaded = (productForm) => {
+const productLoaded = (product) => {
   return {
     type: 'POST_PRODUCT_FORM_SUCCESS',
-    payload: productForm
+    payload: {product}
   }
 };
 
@@ -21,7 +21,7 @@ const putProductError = (error) => {
 const putProductForm = (dispatch) => (storeService) => async (product) => {
   dispatch(putProductRequested());
 
-  storeService.updateProduct(product)
+  return await storeService.updateProduct(product)
     .then( () => dispatch(productLoaded(product)))
     .catch( (error) => dispatch(putProductError({
       code: error.code,

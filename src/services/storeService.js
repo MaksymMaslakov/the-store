@@ -1,4 +1,3 @@
-import { omit } from 'lodash'
 import firebase from "firebase/app";
 
 class StoreService {
@@ -15,7 +14,6 @@ class StoreService {
   logout = async () => await firebase.auth().signOut()
 
   getAllProducts = async (user_id) =>{
-    // TODO: Should return products by user_id
     return await firebase.database()
       .ref('products')
       .orderByChild('user_id')
@@ -47,37 +45,70 @@ class StoreService {
   }
 
   createProduct = async ( newProduct ) => {
-    return  await firebase.database()
-      .ref('products')
-      .push(newProduct)
-      .then(product => {
-        console.log('Service: POST product:', product)
-        return product
-      })
-      .catch(error => ({
-        code: error.code,
-        message: error.message
-      }));
+    const imageFile = newProduct.photo;
 
+    return await firebase.storage().ref(`/images/${imageFile.name}`)
+      .put(imageFile)
+      .then( async(snapshot) => {
+        return await firebase.storage().ref('images').child(imageFile.name).getDownloadURL()
+      })
+      .then( async (fireBaseUrl) => {
+        return await firebase.database()
+          .ref('products')
+          .push({...newProduct, photo: fireBaseUrl})
+          .then( product => {
+            console.log('Service: POST product:', product)
+            return product
+          })
+      })
   }
 
   updateProduct = async ( newProduct ) => {
-    return await firebase.database()
-      .ref('products')
-      .child(newProduct.id)
-      .update(newProduct)
-      .then(product => {
-        console.log('Service: PUT product:', product)
-        return product
-      })
+    const imageFile = newProduct.photo;
+    if(typeof imageFile !== 'string'){
+      return await firebase.storage().ref(`/images/${imageFile.name}`)
+        .put(imageFile)
+        .then( async(snapshot) => {
+          return await firebase.storage().ref('images').child(imageFile.name).getDownloadURL()
+        })
+        .then( async (fireBaseUrl) => {
+          return await firebase.database()
+            .ref('products')
+            .child(newProduct.id)
+            .update({...newProduct, photo: fireBaseUrl})
+            .then( product => {
+              console.log('Service: POST product:', product)
+              return product
+            })
+        })
+    }
+    else{
+      return await firebase.database()
+        .ref('products')
+        .child(newProduct.id)
+        .update(newProduct)
+        .then(product => {
+          console.log('Service: PUT product:', product)
+          return product
+        })
+    }
   }
 
-  deleteProductById = async (id) => {
+  deleteProductById = async (product) => {
     console.log('Service: DELETE')
-    return await firebase.database()
-      .ref('products')
-      .child(id)
-      .remove()
+    return await Promise.all(
+      [
+        firebase.database()
+          .ref('products')
+          .child(product.id)
+          .remove(),
+        firebase.storage()
+          .refFromURL(product.photo)
+          .delete()
+      ])
+
+    // TODO: remove img from storage
+    // sudo apt-get install compizconfig-settings-manager
   }
 }
 

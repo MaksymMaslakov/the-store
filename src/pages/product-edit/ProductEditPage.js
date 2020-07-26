@@ -18,6 +18,7 @@ function ProductEditPage(props) {
   return (
     <section id="product-edit">
       <ProductForm
+        isUpdate={true}
         saveHandler={props.saveHandler(storeService)}/>
     </section>
   )

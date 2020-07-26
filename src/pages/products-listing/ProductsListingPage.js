@@ -16,15 +16,14 @@ function ProductsListingPage(props) {
   useEffect( () => {
     props.fetchProducts(storeService, props.user.id)
   }, [])
-
   return (
     <section id="products-listing">
       <ErrorBoundary error={error}>
-        { isFetching ? <Spinner as="span" animation="border" size="sm" role="status"  aria-hidden="true"/> : null }
         { !!error
           ? <ErrorIndicator/>
           : <ProductsList products={ productsList }/>
         }
+        { isFetching ? <Spinner as="span" animation="border" size="sm" role="status"  aria-hidden="true"/> : null }
         </ErrorBoundary>
     </section>
   );

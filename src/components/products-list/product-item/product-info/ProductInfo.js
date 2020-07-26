@@ -44,7 +44,7 @@ function ProductInfo(props) {
       }
       <div className="d-flex justify-content-around">
         <Button variant="outline-danger"
-                onClick={ () => props.deleteProduct(storeService, id)}
+                onClick={ () => props.deleteProduct(storeService, props.product)}
         >{ props.isDeleting &&
           <Spinner
             as="span"

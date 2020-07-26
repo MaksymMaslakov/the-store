@@ -21,7 +21,7 @@ const saveProductError = (error) => {
 const postProductForm = (dispatch) => (storeService) => async (product) => {
   dispatch(postProductRequested());
 
-  storeService.createProduct(product)
+  return await storeService.createProduct(product)
     .then( (res) => dispatch(productLoaded({ ...product, id: res.key })))
     .catch( (error) => dispatch(saveProductError({
       code: error.code,

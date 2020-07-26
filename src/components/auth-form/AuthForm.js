@@ -1,4 +1,4 @@
-import React, {useContext, useEffect, useState} from "react";
+import React, {useContext, useState} from "react";
 import { connect } from 'react-redux'
 import { withRouter } from 'react-router-dom'
 import { authUser } from '../../redux/actions'
@@ -15,8 +15,6 @@ function AuthForm(props) {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [action, setAction] = useState('SIGN_UP')
-  // const [validated, setValidated] = useState(false);
-
 
   const isFormFill = ((email.length !== 0) && (password.length !== 0))
 
@@ -32,7 +30,6 @@ function AuthForm(props) {
       console.log('form is not correct')
     }else{
       console.log('form is  correct')
-      // setValidated(true);
       props.authUser(storeService, email, password, action)
     }
   }

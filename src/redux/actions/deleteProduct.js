@@ -4,10 +4,10 @@ const deleteProductRequested = () =>{
   }
 };
 
-const deleteProductSuccess = (id) => {
+const deleteProductSuccess = (product) => {
   return {
     type: "DELETE_PRODUCT_SUCCESS",
-    payload: {id}
+    payload: {product}
   }
 };
 
@@ -18,11 +18,11 @@ const deleteProductError = (error) => {
   }
 };
 
-const deleteProduct = (dispatch) => (service, id) => {
+const deleteProduct = (dispatch) => (service, product) => {
   dispatch(deleteProductRequested())
 
-  service.deleteProductById(id)
-    .then(() => dispatch(deleteProductSuccess(id)))
+  service.deleteProductById(product)
+    .then(() => dispatch(deleteProductSuccess(product)))
     .catch((error) => dispatch(deleteProductError({
       code: error.code,
       message: error.message

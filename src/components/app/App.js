@@ -1,8 +1,7 @@
-import React, {useContext, useEffect} from 'react';
+import React, { useEffect } from 'react';
 import { connect } from 'react-redux'
 import { Route, Switch, Redirect } from 'react-router-dom';
 import {authUserSuccess} from '../../redux/actions'
-import TheStoreContext from "../the-store-context";
 import firebase from "firebase/app";
 import 'firebase/auth'
 import 'firebase/storage'
@@ -19,7 +18,7 @@ import PrivateRoute from "../private-route";
 import './App.css';
 
 function App(props) {
-  // const storeService = useContext(TheStoreContext)
+  const { isLoggedIn } = props;
   useEffect( () => {
     const firebaseConfig = {
       apiKey: "AIzaSyDzXG9UZMWdSIs9C0tOAqRaEZHSEqXqFDU",
@@ -36,10 +35,9 @@ function App(props) {
     firebase.auth().onAuthStateChanged((user) => {
       props.onAuthState( user)
     })
-
   }, [])
 
-  const { isLoggedIn } = props;
+
   return (
     <div className="app">
       <Header isLoggedIn={ isLoggedIn }/>
