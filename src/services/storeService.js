@@ -33,13 +33,11 @@ class StoreService {
   }
 
   getProductById = async (id) => {
-    console.log('Service: GET product by id:  ID = ',id)
     return await firebase.database()
       .ref('products')
       .child(id)
       .once("value")
       .then(product => {
-        console.log('Service: GET product by id:',product.val())
         return product.val()
       })
   }
@@ -57,7 +55,6 @@ class StoreService {
           .ref('products')
           .push({...newProduct, photo: fireBaseUrl})
           .then( product => {
-            console.log('Service: POST product:', product)
             return product
           })
       })
@@ -77,7 +74,6 @@ class StoreService {
             .child(newProduct.id)
             .update({...newProduct, photo: fireBaseUrl})
             .then( product => {
-              console.log('Service: POST product:', product)
               return product
             })
         })
@@ -88,14 +84,12 @@ class StoreService {
         .child(newProduct.id)
         .update(newProduct)
         .then(product => {
-          console.log('Service: PUT product:', product)
           return product
         })
     }
   }
 
   deleteProductById = async (product) => {
-    console.log('Service: DELETE')
     return await Promise.all(
       [
         firebase.database()
@@ -108,7 +102,6 @@ class StoreService {
       ])
 
     // TODO: remove img from storage
-    // sudo apt-get install compizconfig-settings-manager
   }
 }
 

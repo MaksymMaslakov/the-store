@@ -12,7 +12,7 @@ function Header({isLoggedIn, logout}) {
   const storeService = useContext(TheStoreContext)
 
   return (
-    <Navbar variant="dark" className="justify-content-between" style={{ background: 'black' }}>
+    <Navbar id="header" className="justify-content-between">
       <Navbar.Brand>
         <Link to='/'>
           TheStore

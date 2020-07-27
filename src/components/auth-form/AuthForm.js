@@ -23,13 +23,9 @@ function AuthForm(props) {
 
     const form = event.currentTarget;
 
-    console.log("Submited")
     if (form.checkValidity() === false) {
       event.stopPropagation();
-
-      console.log('form is not correct')
     }else{
-      console.log('form is  correct')
       props.authUser(storeService, email, password, action)
     }
   }

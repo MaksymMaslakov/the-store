@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { connect } from "react-redux";
-import CryptoJS from 'crypto-js'
 import { withRouter } from 'react-router-dom'
 import {
   Container,
@@ -17,7 +16,6 @@ import {
   clearProductForm,
   updateProductForm
 } from "../../redux/actions";
-
 
 function ProductForm(props) {
   const { title, description, photo, price,
@@ -56,20 +54,18 @@ function ProductForm(props) {
       min: today
     }
   }
-  console.log('constrainValidation.end_sale_period.min: ', constrainValidation.end_sale_period.min)
   const changeTitleHandler = (e) => props.updateForm({...props.productForm,title: e.target.value})
   const changeDescriptionHandler = (e) => props.updateForm({...props.productForm,description: e.target.value})
   const changePhotoHandler = (e) => {
     const imageFile = e.target.files[0];
 
-    //////////// Change file name to his hash for unique name
-    const hashOfFile = CryptoJS.SHA1(CryptoJS.lib.WordArray.create(imageFile));
-      Object.defineProperty(imageFile, 'name', {
-        writable: true,
-        value: imageFile.name.replace(/(.+)(.(jpg|jpeg|png|gif))$/gm, hashOfFile + '$2')
-      });
-      props.updateForm({...props.productForm,photo: imageFile})
-      readURL(e)
+    //////////// Change file name to his hash for unique name on backend
+    Object.defineProperty(imageFile, 'name', {
+      writable: true,
+      value: imageFile.name.replace(/(.+)(.(jpg|jpeg|png|gif|webp))$/gm, props.productForm.title + '$2')
+    });
+    props.updateForm({...props.productForm,photo: imageFile})
+    readURL(e)
   }
   const changePriceHandler = (e) => props.updateForm({...props.productForm,price: e.target.value})
   const changeSalePercentHandler = (e) => props.updateForm({...props.productForm,sale_percent: e.target.value})
@@ -124,7 +120,7 @@ function ProductForm(props) {
             </label>
             <input id="form-input-file"
                    required ={typeof(photo) === 'string' && photo.length === 0}
-                   accept=".jpg, .jpeg, .png, .gif"
+                   accept=".jpg, .jpeg, .png, .gif, .webp"
                    type="file"
                    className="form-control-file"
                    onChange={ changePhotoHandler }/>
